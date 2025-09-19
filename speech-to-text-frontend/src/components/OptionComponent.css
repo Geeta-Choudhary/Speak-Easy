@@ -1,0 +1,119 @@
+.option-box {
+  background: rgba(35, 36, 74, 0.85);
+  border-radius: 18px;
+  padding: 2em 2.5em;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  width: 420px;
+  max-width: 98vw;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  transition: box-shadow 0.3s, background 0.3s;
+}
+
+.option-box.glass {
+  background: rgba(35, 36, 74, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(79, 140, 255, 0.18);
+}
+
+.transcription-box {
+  background: rgba(24, 26, 42, 0.85);
+  border-radius: 8px;
+  padding: 1em;
+  margin-top: 1.5em;
+  color: #b3c7ff;
+  font-size: 1.1em;
+  box-shadow: 0 2px 12px rgba(79, 140, 255, 0.08);
+}
+
+.file-input {
+  margin: 1em 0;
+  color: #fff;
+}
+
+.duration-select-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin-bottom: 1.2em;
+}
+
+.duration-select-row label {
+  color: #b3c7ff;
+  font-size: 1em;
+}
+
+.duration-select-row select {
+  padding: 0.4em 1.2em 0.4em 0.7em;
+  border-radius: 6px;
+  border: 1px solid #4f8cff;
+  background: #23244a;
+  color: #fff;
+  font-size: 1em;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.duration-select-row select:hover {
+  border: 1.5px solid #7faaff;
+}
+
+button {
+  background: linear-gradient(90deg, #4f8cff 60%, #7faaff 100%);
+  color: #fff;
+  border: none;
+  padding: 0.7em 1.5em;
+  margin: 0.5em;
+  border-radius: 8px;
+  font-size: 1.07em;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
+}
+
+button:hover:not(:disabled) {
+  background: linear-gradient(90deg, #7faaff 60%, #4f8cff 100%);
+  box-shadow: 0 4px 16px rgba(79, 140, 255, 0.18);
+}
+
+button:disabled {
+  background: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .option-box {
+    width: 95vw;
+    padding: 1em;
+    border-radius: 12px;
+  }
+}
+
+.download-icon {
+  background: #ffffff;
+  color: #3a6ff7;
+  border-radius: 50%;
+  padding: 8px; /* increased padding */
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s ease-in-out;
+  box-shadow: 0 2px 6px rgba(58, 111, 247, 0.2);
+  display: inline-block;
+  margin: 16px auto; /* centers it */
+}
+
+.download-icon:hover {
+  background: #3a6ff7;
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.download-icon.disabled {
+  background: #f0f0f0;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+}

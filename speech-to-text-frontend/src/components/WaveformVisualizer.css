@@ -1,0 +1,17 @@
+.waveform-container {
+  display: flex;
+  align-items: flex-end;
+  height: 50px;
+  margin: 1.5em auto 0 auto;
+  width: 90%;
+  max-width: 320px;
+  justify-content: center;
+}
+
+.waveform-bar {
+  width: 7px;
+  margin: 0 2px;
+  background: #4f8cff;
+  border-radius: 4px;
+  display: inline-block;
+}

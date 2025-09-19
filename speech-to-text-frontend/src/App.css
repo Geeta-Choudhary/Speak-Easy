@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #0e101c;
+  color: #fff;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e215d 0%, #0e101c 100%);
+}
+
+h1, h2 {
+  margin: 0.5em 0;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 600px) {
+  .option-box {
+    width: 95vw;
+    padding: 1em;
+  }
+}
