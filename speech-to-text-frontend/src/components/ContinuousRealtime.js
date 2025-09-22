@@ -1,85 +1,52 @@
-import React, { useState, useRef, useEffect } from "react";
-import { speechAPI } from "../services/api";
+import React, { useState } from "react";
+import { recordAudio } from "../utils/audioRecorder";
 import WaveformVisualizer from "./WaveformVisualizer";
 import "./OptionComponent.css";
 import DownloadButton from "./DownloadButton";
 
+async function transcribeWithFileApi(audioBlob, language) {
+  const formData = new FormData();
+  formData.append("file", audioBlob, "audio.wav");
+  formData.append("language", language);
+  const response = await fetch("https://voice-transcribe-api.azurewebsites.net/api/file-transcription", {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) throw new Error("Transcription failed");
+  const data = await response.json();
+  return data;
+}
+
 function ContinuousRealtime() {
   const [recording, setRecording] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
   const [transcription, setTranscription] = useState("");
   const [error, setError] = useState(null);
-  const pollingRef = useRef(null);
+  const [duration, setDuration] = useState(60);
 
-  useEffect(() => {
-    // Cleanup polling on unmount
-    return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current);
-    };
-  }, []);
+  const durations = [
+    { label: "15 seconds", value: 15 },
+    { label: "30 seconds", value: 30 },
+    { label: "1 minute", value: 60 },
+    { label: "2 minutes", value: 120 },
+    { label: "3 minutes", value: 180 },
+  ];
 
-  const handleStart = async () => {
+  const handleRecord = async () => {
     setRecording(true);
     setTranscription("");
     setError(null);
-    const newSessionId = `session_${Date.now()}`;
-    setSessionId(newSessionId);
-
     try {
-      const res = await speechAPI.startContinuousTranscription("en-US", newSessionId);
-      if (res.success) {
-        // Start polling for results every 3 seconds
-        pollingRef.current = setInterval(async () => {
-          try {
-            const result = await speechAPI.getContinuousResults(newSessionId);
-            if (result.success) {
-              setTranscription(result.transcription);
-              if (!result.is_active) {
-                clearInterval(pollingRef.current);
-                pollingRef.current = null;
-                setRecording(false);
-              }
-            } else {
-              setError(result.error || "Polling failed.");
-              clearInterval(pollingRef.current);
-              pollingRef.current = null;
-              setRecording(false);
-            }
-          } catch (e) {
-            setError("Polling error.");
-            clearInterval(pollingRef.current);
-            pollingRef.current = null;
-            setRecording(false);
-          }
-        }, 3000);
-      } else {
-        setError(res.error || "Failed to start session.");
-        setRecording(false);
-      }
-    } catch (e) {
-      setError("API call failed.");
-      setRecording(false);
-    }
-  };
-
-  const handleStop = async () => {
-    setRecording(false);
-    if (pollingRef.current) {
-      clearInterval(pollingRef.current);
-      pollingRef.current = null;
-    }
-    if (!sessionId) return;
-    try {
-      const res = await speechAPI.stopContinuousTranscription(sessionId);
+      const audioBlob = await recordAudio(duration);
+      const res = await transcribeWithFileApi(audioBlob, "en-US");
       if (res.success) {
         setTranscription(res.transcription);
       } else {
-        setError(res.error || "Failed to stop session.");
+        setError(res.error || "Transcription failed.");
       }
     } catch (e) {
       setError("API call failed.");
     }
-    setSessionId(null);
+    setRecording(false);
   };
 
   return (
@@ -87,11 +54,22 @@ function ContinuousRealtime() {
         <DownloadButton transcription={transcription} disabled={!transcription} />
     
       <h2>Continuous Real-Time (auto transcription)</h2>
-      <button onClick={handleStart} disabled={recording}>
-        Start Recording
-      </button>
-      <button onClick={handleStop} disabled={!recording}>
-        Stop Recording
+      <div className="duration-select-row">
+        <label htmlFor="duration-select-continuous">Recording Time:</label>
+        <select
+          id="duration-select-continuous"
+          value={duration}
+          onChange={(e) => setDuration(Number(e.target.value))}
+        >
+          {durations.map((d) => (
+            <option key={d.value} value={d.value}>
+              {d.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button onClick={handleRecord} disabled={recording}>
+        {recording ? "Recording..." : `Start Recording (${duration}s)`}
       </button>
       {recording && <WaveformVisualizer />}
       {error && (

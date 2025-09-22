@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import MicTest from "./MicTest";
 import SimpleRealtime from "./SimpleRealtime";
-import ContinuousRealtime from "./ContinuousRealtime";
 import HindiTranscription from "./HindiTranscription";
 import FileTranscribe from "./FileTranscribe";
 import "./DropdownMenu.css";
 
 const options = [
-  { label: "Test Connection & Mic", value: "mic" },
-  { label: "Simple Real-Time (wait by duration)", value: "simple" },
-  { label: "Continuous Real-Time (auto transcription)", value: "continuous" },
-  { label: "Hindi-Language Support Transcription", value: "hindi" },
-  { label: "File Transcribe", value: "file" },
+  { label: "Quick Mic Test 🎤", value: "mic" },
+  { label: "English Voice to Text ✨", value: "simple" },
+  { label: "Hindi Voice to Text 🌏", value: "hindi" },
+  { label: "Upload Audio File 📁", value: "file" },
 ];
 
 function DropdownMenu() {
@@ -26,9 +24,6 @@ function DropdownMenu() {
     case "simple":
       OptionComponent = <SimpleRealtime />;
       break;
-    case "continuous":
-      OptionComponent = <ContinuousRealtime />;
-      break;
     case "hindi":
       OptionComponent = <HindiTranscription />;
       break;
@@ -41,27 +36,29 @@ function DropdownMenu() {
 
   return (
     <section className="options-section">
-      <div
-        className="dropdown"
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-      >
-        <select
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-          className="dropdown-select"
+      <div className="dropdown-container">
+        <div
+          className="dropdown"
+          onMouseEnter={() => setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
         >
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        {showTooltip && (
-          <div className="dropdown-tooltip">
-            You can view the other options here
-          </div>
-        )}
+          <select
+            value={selected}
+            onChange={(e) => setSelected(e.target.value)}
+            className="dropdown-select"
+          >
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          {showTooltip && (
+            <div className="dropdown-tooltip">
+              Choose your transcription mode
+            </div>
+          )}
+        </div>
       </div>
       <div className="option-component">{OptionComponent}</div>
     </section>

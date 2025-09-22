@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { simpleRealtimeTranscribe } from "../services/api";
+import { recordAudio } from "../utils/audioRecorder";
 import "./OptionComponent.css";
 import DownloadButton from "./DownloadButton";
 
 const durations = [
+  { label: "5 seconds", value: 5 },
+  { label: "10 seconds", value: 10 },
   { label: "15 seconds", value: 15 },
   { label: "30 seconds", value: 30 },
   { label: "1 minute", value: 60 },
@@ -11,36 +13,80 @@ const durations = [
   { label: "3 minutes", value: 180 },
 ];
 
+async function transcribeWithFileApi(audioBlob, language) {
+  const file = new File([audioBlob], "audio.wav", { type: "audio/wav" });
+  const formData = new FormData();
+  formData.append("audio", file, "audio.wav");
+  formData.append("language", language);
+  const response = await fetch(
+    "https://voice-transcribe-api.azurewebsites.net/api/file-transcription",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+  if (!response.ok) throw new Error("Transcription failed");
+  const data = await response.json();
+  return data;
+}
+
 function SimpleRealtime() {
   const [recording, setRecording] = useState(false);
   const [transcription, setTranscription] = useState("");
-  const [duration, setDuration] = useState(15);
+  const [duration, setDuration] = useState(5);
   const [error, setError] = useState(null);
+  const [recordingDone, setRecordingDone] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
 
   const handleRecord = async () => {
     setRecording(true);
     setTranscription("");
-   setError(null);
+    setError(null);
+    setRecordingDone(false);
+    setTranscribing(false);
+    setAudioBlob(null);
     try {
-      const res = await simpleRealtimeTranscribe(duration, "en-US");
+      const blob = await recordAudio(duration);
+      setAudioBlob(blob);
+      setRecording(false);
+      setRecordingDone(true);
+      setTranscribing(true);
+      const res = await transcribeWithFileApi(blob, "en-US");
+      setTranscribing(false);
       if (res.success) {
         setTranscription(res.transcription);
       } else {
-        setError(res.error || "Transcription failed.");
+        setError(res.error || "Sorry, we couldn't transcribe that. Please try again.");
       }
     } catch (e) {
-      setError("API call failed.");
+      setRecording(false);
+      setTranscribing(false);
+      setError("Oops! Something went wrong. Please check your microphone and try again.");
     }
-    setRecording(false);
+  };
+
+  const handleDownloadAudio = () => {
+    if (!audioBlob) return;
+    const url = URL.createObjectURL(audioBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "voice_recording.wav";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   return (
     <div className="option-box glass" style={{ position: "relative" }}>
-        <DownloadButton transcription={transcription} disabled={!transcription} />
-    
-      <h2>Simple Real-Time (wait by duration)</h2>
+      <DownloadButton transcription={transcription} disabled={!transcription} />
+      
+      <h2>Voice to Text</h2>
+      <p className="subtitle">Convert your voice to text in real-time</p>
+      
       <div className="duration-select-row">
-        <label htmlFor="duration-select">Recording Time:</label>
+        <label htmlFor="duration-select">Recording Duration:</label>
         <select
           id="duration-select"
           value={duration}
@@ -53,23 +99,44 @@ function SimpleRealtime() {
           ))}
         </select>
       </div>
-      <button onClick={handleRecord} disabled={recording}>
-        {recording ? "Recording..." : `Start Recording (${duration}s)`}
+
+      <button onClick={handleRecord} disabled={recording} className="primary-button">
+        {recording ? "Recording... 🎤" : `Start Recording ${duration}s 🎤`}
       </button>
-      {error && (
-        <div className="transcription-box" style={{ color: "#ff6b6b" }}>
-          <strong>❌ {error}</strong>
+      
+      {audioBlob && (
+        <button onClick={handleDownloadAudio} className="secondary-button">
+          Download Recording 💾
+        </button>
+      )}
+
+      {recordingDone && (
+        <div className="status-message success">
+          <span>✓</span> Recording completed
         </div>
       )}
+      
+      {transcribing && (
+        <div className="status-message info">
+          <div className="processing-indicator"></div>
+          Converting speech to text...
+        </div>
+      )}
+      
+      {error && (
+        <div className="status-message error">
+          <span>⚠️</span> {error}
+        </div>
+      )}
+      
       {transcription && (
         <div className="transcription-box">
-          <strong>Transcription:</strong> {transcription}
+          <div className="transcription-header">Your Text</div>
+          <div className="transcription-content">{transcription}</div>
         </div>
       )}
     </div>
-    
   );
- 
 }
 
 export default SimpleRealtime;

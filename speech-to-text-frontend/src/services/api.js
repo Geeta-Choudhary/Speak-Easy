@@ -1,5 +1,5 @@
-const API_URL = process.env.REACT_APP_API_URL;
-
+// const API_URL = "https://voice-transcribe-api.azurewebsites.net";
+const API_URL = "https://voice-transcribe-api.azurewebsites.net";
 export const speechAPI = {
   testConnection: async (duration = 5) => {
     try {

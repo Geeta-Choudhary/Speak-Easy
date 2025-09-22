@@ -1,20 +1,138 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #0e101c;
-  color: #fff;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #23244a 0%, #1e215d 100%);
+  color: #f5f7fa;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1e215d 0%, #0e101c 100%);
+  line-height: 1.6;
 }
 
-h1, h2 {
+h1, h2, h3 {
   margin: 0.5em 0;
   letter-spacing: 0.01em;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #b3c7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: #b3c7ff;
+  font-size: 1.1em;
+  margin-bottom: 2em;
+  opacity: 0.9;
+}
+
+button {
+  background: linear-gradient(90deg, #4f8cff 60%, #7faaff 100%);
+  color: #fff;
+  border: none;
+  padding: 0.7em 1.5em;
+  margin: 0.5em;
+  border-radius: 10px;
+  font-size: 1.07em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 2px 12px rgba(79, 140, 255, 0.13);
+}
+
+button:hover:not(:disabled) {
+  background: linear-gradient(90deg, #7faaff 60%, #4f8cff 100%);
+  box-shadow: 0 4px 24px rgba(79, 140, 255, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+button:disabled {
+  background: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+input, select {
+  background: rgba(35,36,74,0.7);
+  color: #eaf1ff;
+  border: 1.5px solid #4f8cff;
+  border-radius: 7px;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  margin: 0.3em 0.7em 0.3em 0;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+}
+
+input:focus, select:focus {
+  border: 1.5px solid #7faaff;
+  background: rgba(35,36,74,0.95);
+}
+
+.status-message {
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  animation: fadeIn 0.3s ease;
+}
+
+.status-message.success {
+  background: rgba(72, 187, 120, 0.15);
+  color: #68d391;
+}
+
+.status-message.error {
+  background: rgba(245, 101, 101, 0.15);
+  color: #fc8181;
+}
+
+.status-message.info {
+  background: rgba(79, 140, 255, 0.15);
+  color: #b3c7ff;
+}
+
+.processing-indicator {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #4f8cff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+.transcription-header {
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  color: #fff;
+}
+
+.transcription-content {
+  line-height: 1.8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 600px) {
   .option-box {
     width: 95vw;
     padding: 1em;
+  }
+  
+  .subtitle {
+    font-size: 1em;
+    margin-bottom: 1.5em;
+  }
+  
+  .status-message {
+    font-size: 0.9em;
+    padding: 0.8em;
   }
 }
