@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #23244a 0%, #1e215d 100%);
+  color: #f5f7fa;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.5s;
+}
+
+code {
+  font-family: 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  background: rgba(35,36,74,0.15);
+  border-radius: 6px;
+  padding: 0.2em 0.5em;
+  color: #7faaff;
+}

@@ -1,0 +1,114 @@
+.homepage {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e215d 0%, #0e101c 100%);
+}
+
+.blob1 {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  z-index: 0;
+  opacity: 0.25;
+  filter: blur(2px);
+}
+
+.particles {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f8cff 60%, #fff 100%);
+  filter: blur(1.5px);
+  opacity: 0.4;
+}
+
+.soundwave-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.wave-bar {
+  position: absolute;
+  bottom: 0;
+  width: 2.5%;
+  background: rgba(79, 140, 255, 0.3);
+  border-radius: 8px;
+}
+
+.homepage-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  margin-top: 10vh;
+  padding: 2.5em 2em 2em 2em;
+  border-radius: 24px;
+}
+
+.glass {
+  background: rgba(30, 33, 93, 0.45);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(79, 140, 255, 0.18);
+}
+
+.subtitle {
+  font-size: 1.3em;
+  color: #b3c7ff;
+  margin-bottom: 2em;
+  letter-spacing: 0.01em;
+}
+
+.down-arrow {
+  margin: 2em auto 0;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s;
+}
+
+.glow {
+  filter: drop-shadow(0 0 12px #4f8cff) drop-shadow(0 0 24px #4f8cff88);
+}
+
+@media (max-width: 600px) {
+  .homepage-content {
+    padding: 1.2em 0.5em 1.5em 0.5em;
+    border-radius: 16px;
+  }
+  .blob1 {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+.down-arrow.glow {
+  filter: drop-shadow(0 0 16px #4f8cff) drop-shadow(0 0 32px #7faaff88);
+  transition: filter 0.2s;
+}
+.down-arrow.glow:hover {
+  filter: drop-shadow(0 0 32px #7faaff) drop-shadow(0 0 48px #4f8cffcc);
+}
